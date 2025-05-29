@@ -1,0 +1,8 @@
+.menu-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #264653;
+  color: #fff;
+  padding: 80px 20px;
+  box-sizing: border-box;
+}
