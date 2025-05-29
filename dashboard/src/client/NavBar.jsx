@@ -43,11 +43,15 @@ function NavBar() {
             style={{ minWidth: 0, padding: 0 }}
           >
             <img
-              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80"
+              src="/kantokusina.png"
               alt="Kanto Kusina Logo"
               className="navbar-logo-img"
             />
+            
           </Button>
+          <Typography variant="h6">
+              Kanto Kusina
+            </Typography>
         </Box>
         {/* Desktop Links */}
         {!isMobile && (
