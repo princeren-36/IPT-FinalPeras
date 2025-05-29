@@ -44,7 +44,13 @@ function Cart() {
 
   const getTotal = () => {
     return cartItems.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace(/[^\d.]/g, ''));
+      let price = 0;
+      if (typeof item.price === 'number') {
+        price = item.price;
+      } else if (typeof item.price === 'string') {
+        // Remove currency symbols and commas, then parse
+        price = parseFloat(item.price.replace(/[^\d.]/g, ''));
+      }
       return sum + (isNaN(price) ? 0 : price) * item.qty;
     }, 0);
   };
