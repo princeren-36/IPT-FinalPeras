@@ -20,7 +20,7 @@ const navLinks = [
   { label: "Home", to: "/" },
   { label: "Menu", to: "/menu" },
   { label: "About", to: "/about" },
-  { label: "Cart", to: "/cart" },
+  
 ];
 
 function NavBar() {
