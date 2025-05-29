@@ -45,8 +45,8 @@ function Home() {
           </Container>
           <Container sx={{ width: "100%", height: "100%" }}>
           <img
-            src="../src/images/kantokusina.png"
-            alt="Restaurant"
+            src="/kantokusina.png"
+            alt="Kanto Kusina"
             style={{
               width: "100%",
               height: "100%",
