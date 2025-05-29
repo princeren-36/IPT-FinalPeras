@@ -18,7 +18,7 @@ function Cart() {
   }, []);
 
   useEffect(() => {
-    fetch("http://https://ipt-final-peras-h1cu.vercel.app/products")
+    fetch("https://kantokusina.vercel.app/products")
       .then(res => res.json())
       .then(data => setProducts(data));
   }, []);
@@ -91,7 +91,7 @@ function Cart() {
                       item.image
                         ? item.image.startsWith('http')
                           ? item.image
-                          : `http://localhost:5000${item.image}`
+                          : `https://kantokusina.vercel.app${item.image}`
                         : ''
                     }
                     alt={item.name}

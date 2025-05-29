@@ -15,7 +15,7 @@ function Menu() {
 
   // Load products and cart from localStorage
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("https://kantokusina.vercel.app/products")
       .then(res => res.json())
       .then(data => setMenuItems(data))
       .catch(() => setMenuItems([]));
@@ -69,7 +69,7 @@ function Menu() {
     formData.append('category', newProduct.category);
     if (imageFile) formData.append('image', imageFile);
 
-    const res = await fetch("http://localhost:5000/products", {
+    const res = await fetch("https://kantokusina.vercel.app/products", {
       method: "POST",
       body: formData,
     });
@@ -118,7 +118,7 @@ function Menu() {
                   item.image
                     ? item.image.startsWith('http')
                       ? item.image
-                      : `http://localhost:5000${item.image}`
+                      : `https://kantokusina.vercel.app${item.image}`
                     : ''
                 }
                 alt={item.name}

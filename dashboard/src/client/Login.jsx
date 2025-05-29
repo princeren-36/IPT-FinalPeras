@@ -23,7 +23,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/user/login", credentials);
+      const response = await axios.post("https://kantokusina.vercel.app/user/login", credentials);
       const user = response.data.user;
       localStorage.setItem("user", JSON.stringify(user));
 
