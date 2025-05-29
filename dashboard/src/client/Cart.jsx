@@ -18,7 +18,7 @@ function Cart() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("http://https://ipt-final-peras-h1cu.vercel.app/products")
       .then(res => res.json())
       .then(data => setProducts(data));
   }, []);
