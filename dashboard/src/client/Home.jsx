@@ -9,27 +9,7 @@ import NavBar from "./NavBar";
 import "../styles/Home.css";
 
 function Home() {
-  // Example menu items (replace with dynamic data as needed)
-  const menuItems = [
-    {
-      name: "Chicken Inasal",
-      description: "Grilled chicken marinated in local spices.",
-      price: "₱150",
-      photo: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      name: "Pancit Cabagan",
-      description: "Stir-fried noodles with pork and vegetables.",
-      price: "₱120",
-      photo: "https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80"
-    },
-    {
-      name: "Pinapaitan",
-      description: "Bitter beef stew, a regional favorite.",
-      price: "₱180",
-      photo: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80"
-    }
-  ];
+  const menuItems = [];
 
   return (
     <div>
@@ -48,7 +28,7 @@ function Home() {
               fontFamily: 'inherit',
               fontSize: { xs: "2rem", md: "3rem" }
             }}>
-              Welcome to Nueva Vizcaya Eats
+              Mama's Legacy to Feed.
             </Typography>
             <Typography variant="h5" color="#fff" gutterBottom sx={{ fontSize: { xs: "1.1rem", md: "1.5rem" } }}>
               Discover the best dishes from the heart of Nueva Vizcaya!
@@ -63,6 +43,18 @@ function Home() {
               View Menu
             </Button>
           </Container>
+          <Container sx={{ width: "100%", height: "100%" }}>
+          <img
+            src="../src/images/kantokusina.png"
+            alt="Restaurant"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+          </Container>
+          
         </Box>
 
         {/* Our Story */}
