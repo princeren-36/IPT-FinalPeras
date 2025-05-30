@@ -6,7 +6,7 @@ import Menu from './client/Menu';
 import Cart from './client/Cart';
 import NavBar from './client/NavBar';
 import Login from "./client/Login";
-import Register from "./client/register";
+import Register from "./client/Register";
 
 import Admin from './admin/Dashboard';
 import ManageProducts from "./admin/ManageProducts";
