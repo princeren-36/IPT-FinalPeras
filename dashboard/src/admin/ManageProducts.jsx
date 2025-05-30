@@ -22,15 +22,12 @@ import {
 } from "@mui/material";
 import AdminNavbar from "./AdminNavbar";
 import "../styles/ManageProducts.css";
-
+import axios from "axios";
 const categories = [
   "Rice Meal",
   "Snacks",
   "Drinks"
 ];
-
-const cloudinaryUrl = "https://api.cloudinary.com/v1_1/your-cloud-name/upload";
-const cloudinaryUploadPreset = "your-upload-preset"; // You need to set this in your Cloudinary settings.
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -51,7 +48,7 @@ const ManageProducts = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://kantokusina.vercel.app/products");
+      const res = await fetch("http://localhost:5000/products");
       if (!res.ok) throw new Error("Failed to fetch products");
       const data = await res.json();
       setProducts(data);
@@ -103,24 +100,6 @@ const ManageProducts = () => {
     return errors;
   };
 
-  const uploadImage = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", cloudinaryUploadPreset);
-
-    try {
-      const res = await fetch(cloudinaryUrl, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      return data.secure_url;
-    } catch (err) {
-      throw new Error("Image upload failed.");
-    }
-  };
-
   const handleSave = async (e) => {
     e.preventDefault();
     const errors = validateProduct();
@@ -130,49 +109,47 @@ const ManageProducts = () => {
     }
 
     try {
-      let imageUrl = form.image;
-
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
-      }
-
-      let url = "https://kantokusina.vercel.app/products";
+      let url = "http://localhost:5000/products";
       let method = "POST";
-
       if (editingProduct) {
         url += `/${editingProduct._id}`;
         method = "PUT";
       }
 
-      const productData = {
-        name: form.name,
-        price: form.price,
-        category: form.category,
-        image: imageUrl,
-      };
+      const formData = new FormData();
+      formData.append("name", form.name);
+      formData.append("price", form.price);
+      formData.append("category", form.category);
 
-      const res = await fetch(url, {
+      if (imageFile) {
+        formData.append("image", imageFile);
+      } else if (form.image && editingProduct) {
+        // Send the existing image URL for updates if no new file is selected
+        formData.append("image", form.image);
+      }
+
+      await axios({
         method,
+        url,
+        data: formData,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
-        body: JSON.stringify(productData),
       });
-
-      if (!res.ok) throw new Error("Failed to save product");
 
       setSnackbar(editingProduct ? "Product updated!" : "Product added!");
       setDialogOpen(false);
       fetchProducts();
     } catch (err) {
       setSnackbar("Error: " + err.message);
+      console.log("Error saving product:", err);
     }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
-      const res = await fetch(`https://kantokusina.vercel.app/products/${id}`, { method: "DELETE" });
+      const res = await fetch(`http://localhost:5000/products/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
       setSnackbar("Product deleted!");
       fetchProducts();
@@ -184,7 +161,7 @@ const ManageProducts = () => {
   if (loading)
     return (
       <>
-        <AdminNavbar tab={1} onTabChange={() => {}} onLogout={() => {}} />
+        <AdminNavbar tab={1} onTabChange={() => { }} onLogout={() => { }} />
         <div className="admin-root">
           <div className="manage-products-loading">
             <CircularProgress />
@@ -195,7 +172,7 @@ const ManageProducts = () => {
 
   return (
     <>
-      <AdminNavbar tab={1} onTabChange={() => {}} onLogout={() => {}} />
+      <AdminNavbar tab={1} onTabChange={() => { }} onLogout={() => { }} />
       <div className="admin-root">
         <div className="admin-content">
           <h2 className="manage-products-title">Admin - Manage Products</h2>

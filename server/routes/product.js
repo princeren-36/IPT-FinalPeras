@@ -41,17 +41,28 @@ router.get("/", async (req, res) => {
   }
 });
 router.post("/", upload.single("image"), async (req, res) => {
+  console.log("req.body:", req.body);
+  console.log("req.file:", req.file); // Debug: check if file is received
   try {
-    let imageUrl = "";
+    let imageUrl = '';
     if (req.file) {
-      const result = await streamUpload(req);
-      imageUrl = result.secure_url;
+      try {
+        const uploadResult = await streamUpload(req);
+        imageUrl = uploadResult.secure_url;
+        console.log(imageUrl);
+      } catch (err) {
+        console.error('Cloudinary upload failed:', err);
+        throw "Image upload failed";
+      }
+    } else if (req.body.image) {
+      imageUrl = req.body.image; // fallback for updates with no new image
     }
     const { name, price, category } = req.body;
     const product = new Product({ name, price, category, image: imageUrl });
     await product.save();
     res.status(201).json(product);
   } catch (err) {
+    console.error("Error adding product:", err);
     res.status(500).json({ message: "Failed to add product" });
   }
 });

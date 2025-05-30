@@ -7,7 +7,7 @@ function ManageUsers() {
   const [userSnackbar, setUserSnackbar] = useState('');
 
   useEffect(() => {
-    fetch('https://kantokusina.vercel.app/user/all')
+    fetch('http://localhost:5000/user/all')
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(() => setUsers([]));
@@ -16,7 +16,7 @@ function ManageUsers() {
   const onUserDelete = async (userId) => {
     if (!window.confirm('Delete this user?')) return;
     try {
-      const res = await fetch(`https://kantokusina.vercel.app/user/${userId}`, { method: 'DELETE' });
+      const res = await fetch(`http://localhost:5000/user/${userId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete user');
       setUserSnackbar('User deleted!');
       setUsers(users.filter(u => u._id !== userId));
@@ -27,7 +27,7 @@ function ManageUsers() {
 
   return (
     <>
-      <AdminNavbar tab={2} onTabChange={() => {}} onLogout={() => {}} />
+      <AdminNavbar tab={2} onTabChange={() => { }} onLogout={() => { }} />
       <div className="admin-root">
         <div className="admin-content">
           <h2 style={{ color: '#ffb347', marginBottom: '1.5rem' }}>Admin - Manage Users</h2>

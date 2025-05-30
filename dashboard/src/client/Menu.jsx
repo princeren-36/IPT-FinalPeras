@@ -18,7 +18,7 @@ function Menu() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    fetch("https://kantokusina.vercel.app/products")
+    fetch("http://localhost:5000/products")
       .then(res => res.json())
       .then(data => setMenuItems(data))
       .catch(() => setMenuItems([]));
