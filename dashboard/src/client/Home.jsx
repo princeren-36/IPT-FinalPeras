@@ -170,7 +170,7 @@ function Home() {
               ))}
             </Grid>
             <Box sx={{ textAlign: "center", mt: 4 }}>
-              <Button variant="outlined" color="warning" href="/menu">
+              <Button variant="outlined" color="warning" Link to="/menu">
                 See Full Menu
               </Button>
             </Box>
