@@ -7,9 +7,18 @@ html, body {
 }
 
 .home-container {
+  width: 100%;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+}
+
+.home-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .home-section img {
@@ -25,6 +34,227 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* Hero Section */
+.home-hero-section {
+  background: url('/chicken.jpg'), url('/desert.jpg'), url('/seafoods.jpg');
+  background-position: left center, center center, right center;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-size: 33.33% 100%, 33.33% 100%, 33.33% 100%;
+  min-height: 93vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.home-hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(45,45,45,0.7);
+  z-index: 2;
+}
+.home-hero-content {
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+  text-align: center;
+  position: relative;
+  z-index: 3;
+}
+.home-title {
+  color: #ffb347;
+  font-weight: bold;
+  font-family: inherit;
+  font-size: 4rem;
+}
+@media (min-width: 900px) {
+  .home-title { font-size: 6rem; }
+}
+.home-est {
+  color: #fff;
+  font-size: 1.1rem;
+}
+@media (min-width: 900px) {
+  .home-est { font-size: 1.5rem; }
+}
+.home-menu-btn {
+  margin-top: 2rem;
+  font-weight: bold;
+  border-radius: 20px;
+  background: #ffb347;
+  color: #23263a;
+}
+.home-menu-btn:hover {
+  background: #ffa726;
+}
+
+/* Menu Preview Section */
+.home-menu-preview-section {
+  background: #0d0d0e;
+  width: 100vw;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.home-menu-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  width: 100%;
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+}
+.home-menu-preview-title {
+  color: #ffb347;
+  font-size: 1.5rem;
+  text-align: center;
+}
+@media (min-width: 900px) {
+  .home-menu-preview-title { font-size: 2.5rem; }
+}
+.home-menu-preview-grid {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+.home-menu-preview-grid-item {
+  display: flex;
+  justify-content: center;
+}
+.home-menu-preview-card {
+  background: #222;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  width: 350px;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.5);
+  margin-left: auto;
+  margin-right: auto;
+}
+.home-menu-preview-img {
+  max-height: 90%;
+  max-width: 90%;
+  border-radius: 16px;
+  object-fit: contain;
+  margin-left: auto;
+  margin-right: auto;
+}
+.home-menu-preview-link-box {
+  text-align: center;
+  margin-top: 2rem;
+}
+.home-menu-preview-link-btn {
+  border-color: #ffb347;
+  color: #ffb347;
+}
+.home-menu-preview-link-btn:hover {
+  background: #ffb347;
+  color: #23263a;
+}
+
+/* About Section */
+.home-about-section {
+  background: #3a3f5c;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-about-container {
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+  text-align: center;
+}
+.home-about-title {
+  color: #ffb347;
+  margin-bottom: 1rem;
+}
+.home-about-desc {
+  color: #fff;
+}
+
+/* Location Section */
+.home-location-section {
+  background: #2d2d2d;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-location-container {
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+  text-align: center;
+}
+.home-location-title {
+  color: #ffb347;
+  margin-bottom: 1rem;
+}
+.home-location-desc {
+  color: #fff;
+  margin-bottom: 1rem;
+}
+.home-location-icon {
+  vertical-align: middle;
+  margin-right: 8px;
+}
+.home-location-map-box {
+  margin-top: 2rem;
+}
+.home-location-map {
+  border: 0;
+  border-radius: 8px;
+}
+
+/* Contact Section */
+.home-contact-section {
+  background: #ffb347;
+  min-height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-contact-container {
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+  text-align: center;
+}
+.home-contact-title {
+  color: #222;
+  margin-bottom: 1rem;
+}
+.home-contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+.home-contact-icon {
+  font-size: 40px !important;
+  color: #222;
+}
+.home-contact-phone {
+  color: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.home-contact-phone-icon {
+  font-size: 40px !important;
+  color: #222;
 }
 
 /* Add different background colors for each section */

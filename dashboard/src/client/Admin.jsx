@@ -1,7 +1,88 @@
-import React from 'react';
-import { Container, Typography, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Typography, Paper, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import Dashboard from '../admin/Dashboard';
+import ManageUsers from '../admin/ManageUsers';
+import ManageProducts from '../admin/ManageProducts';
+
+import AdminSidebar from '../admin/AdminSidebar';
 
 function Admin() {
+  const navigate = useNavigate();
+  const [tab, setTab] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginDialogOpen, setLoginDialogOpen] = useState(true);
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+  // Product management state
+  const [products, setProducts] = useState([]);
+  const [productDialogOpen, setProductDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [productForm, setProductForm] = useState({ name: '', price: '', category: '', image: null });
+  const [productSnackbar, setProductSnackbar] = useState('');
+  // User management state
+  const [users, setUsers] = useState([]);
+  const [userSnackbar, setUserSnackbar] = useState('');
+
+  // Fetch products and users (simulate for now)
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      fetch('/products')
+        .then(res => res.json())
+        .then(data => setProducts(data));
+      fetch('/users')
+        .then(res => res.json())
+        .then(data => setUsers(data));
+    }
+  }, [isLoggedIn]);
+
+  const handleTabChange = (event, newValue) => setTab(newValue);
+
+  // Admin login logic (simple demo, replace with real auth)
+  const handleLogin = () => {
+    if (loginForm.username === 'admin' && loginForm.password === 'admin') {
+      setIsLoggedIn(true);
+      setLoginDialogOpen(false);
+      setLoginError('');
+    } else {
+      setLoginError('Invalid credentials');
+    }
+  };
+
+  // Product CRUD logic
+  const handleOpenProductDialog = (product = null) => {
+    setEditingProduct(product);
+    setProductForm(product ? { ...product, image: null } : { name: '', price: '', category: '', image: null });
+    setProductDialogOpen(true);
+  };
+  const handleCloseProductDialog = () => setProductDialogOpen(false);
+  const handleProductFormChange = (e) => {
+    const { name, value, files } = e.target;
+    setProductForm(prev => ({ ...prev, [name]: files ? files[0] : value }));
+  };
+  const handleProductSave = async () => {
+    // Simulate API call
+    setProductSnackbar(editingProduct ? 'Product updated!' : 'Product added!');
+    setProductDialogOpen(false);
+  };
+  const handleProductDelete = (id) => {
+    setProductSnackbar('Product deleted!');
+  };
+
+  // User management logic (demo only)
+  const handleUserDelete = (id) => {
+    setUserSnackbar('User deleted!');
+  };
+
+  // Add logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    setLoginDialogOpen(true);
+    setLoginForm({ username: '', password: '' });
+    navigate('/login');
+  };
+
   return (
     <>
       {isLoggedIn && (

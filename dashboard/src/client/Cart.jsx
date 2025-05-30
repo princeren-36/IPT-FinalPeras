@@ -11,6 +11,7 @@ function Cart() {
   const [products, setProducts] = useState([]);
   const [payDialogOpen, setPayDialogOpen] = useState(false);
   const [userDetails, setUserDetails] = useState({ name: '', email: '', address: '' });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -48,7 +49,6 @@ function Cart() {
       if (typeof item.price === 'number') {
         price = item.price;
       } else if (typeof item.price === 'string') {
-        // Remove currency symbols and commas, then parse
         price = parseFloat(item.price.replace(/[^\d.]/g, ''));
       }
       return sum + (isNaN(price) ? 0 : price) * item.qty;
@@ -63,12 +63,63 @@ function Cart() {
     setUserDetails(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleOrderSubmit = () => {
-    console.log('Processing order for:', userDetails, cart);
-    alert('Order processed successfully!');
-    setCart([]);
-    localStorage.removeItem('cart');
-    handleClosePayDialog();
+  const handleOrderSubmit = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      alert("You must be logged in to place an order.");
+      handleClosePayDialog();
+      return;
+    }
+
+    const { name, email, address } = userDetails;
+    const newErrors = {};
+    if (!name.trim()) newErrors.name = "Name is required.";
+    if (!email.trim()) newErrors.email = "Email is required.";
+    else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) newErrors.email = "Please enter a valid email address.";
+    }
+    if (!address.trim()) newErrors.address = "Address is required.";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+
+    const orderData = {
+      userId: user._id, // adjust this if your user object is different
+      name,
+      email,
+      address,
+      cart: cartItems.map(item => ({
+        productId: item._id,
+        name: item.name,
+        price: item.price,
+        qty: item.qty,
+      })),
+      total: getTotal(),
+    };
+
+    try {
+      const response = await fetch("https://kantokusina.vercel.app/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) throw new Error("Failed to place order");
+
+      const result = await response.json();
+      console.log("Order placed:", result);
+      alert("Order placed successfully!");
+
+      setCart([]);
+      localStorage.removeItem("cart");
+      handleClosePayDialog();
+      setErrors({});
+      setUserDetails({ name: '', email: '', address: '' });
+    } catch (error) {
+      console.error(error);
+      alert("There was an error placing your order. Please try again.");
+    }
   };
 
   return (
@@ -80,6 +131,7 @@ function Cart() {
       }}>
         Cart
       </Typography>
+
       {cartItems.length === 0 ? (
         <Typography variant="body1" sx={{ color: "#fff" }}>
           Your cart is empty.
@@ -113,6 +165,7 @@ function Cart() {
                         color="warning"
                         onClick={() => handleChangeQty(idx, -1)}
                         disabled={item.qty <= 1}
+                        sx={{ color: '#ffb347', border: '1px solid #ffb347', mr: 1 }}
                       >
                         <RemoveIcon />
                       </IconButton>
@@ -121,14 +174,15 @@ function Cart() {
                         size="small"
                         color="warning"
                         onClick={() => handleChangeQty(idx, 1)}
+                        sx={{ color: '#ffb347', border: '1px solid #ffb347', ml: 1 }}
                       >
                         <AddIcon />
                       </IconButton>
                     </Box>
                     <Button
                       variant="outlined"
-                      color="warning"
-                      sx={{ mt: 1, borderRadius: 2, fontWeight: "bold" }}
+                      color="error"
+                      sx={{ mt: 1, borderColor: '#ffb347', color: '#ffb347' }}
                       onClick={() => handleRemove(idx)}
                     >
                       Remove
@@ -138,6 +192,7 @@ function Cart() {
               </Grid>
             ))}
           </Grid>
+
           <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <Typography variant="h5" sx={{ color: "#ffb347", fontWeight: "bold" }}>
               Total: ₱{getTotal()}
@@ -147,6 +202,7 @@ function Cart() {
               color="warning"
               sx={{ fontWeight: "bold", borderRadius: 2 }}
               onClick={handleOpenPayDialog}
+              disabled={cartItems.length === 0}
             >
               Pay
             </Button>
@@ -166,6 +222,8 @@ function Cart() {
             onChange={handleUserInputChange}
             fullWidth
             required
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <TextField
             margin="dense"
@@ -175,6 +233,8 @@ function Cart() {
             onChange={handleUserInputChange}
             fullWidth
             required
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
             margin="dense"
@@ -184,6 +244,8 @@ function Cart() {
             onChange={handleUserInputChange}
             fullWidth
             required
+            error={!!errors.address}
+            helperText={errors.address}
           />
         </DialogContent>
         <DialogActions>
