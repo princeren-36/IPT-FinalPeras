@@ -6,7 +6,6 @@ import {
   Button,
   Grid,
   Card,
-  CardMedia,
   Link,
 } from "@mui/material";
 import RoomIcon from "@mui/icons-material/Room";
@@ -74,83 +73,109 @@ function Home() {
               EST. 2019
             </Typography>
             <Button
-  variant="contained"
-  color="warning"
-  size="large"
-  sx={{ mt: 4, fontWeight: "bold", borderRadius: "20px" }}
-  onClick={() => {
-    const menuSection = document.getElementById("menu");
-    if (menuSection) {
-      menuSection.scrollIntoView({ behavior: "smooth" });
-    }
-  }}
->
-  View Menu
-</Button>
-
+              variant="contained"
+              color="warning"
+              size="large"
+              sx={{ mt: 4, fontWeight: "bold", borderRadius: "20px" }}
+              onClick={() => {
+                const menuSection = document.getElementById("menu");
+                if (menuSection) {
+                  menuSection.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              View Menu
+            </Button>
           </Container>
         </Box>
 
         {/* Menu Preview */}
         <Box
-  id="menu"
-  sx={{
-    background: "#0d0d0e",
-    width: "100%",
-    minHeight: "90vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }}
->
-  <Container maxWidth="lg" sx={{ px: 2 }}>
-    <Typography
-      variant="h3"
-      color="#ffb347"
-      gutterBottom
-      sx={{ fontSize: { xs: "1.5rem", md: "2.5rem" }, textAlign: "center" }}
-    >
-      Menu Preview
-    </Typography>
-    <Grid container spacing={2}>
-      {["/menu1.png", "/menu2.png", "/menu3.png"].map((img, idx) => (
-        <Grid item xs={12} sm={6} md={4} key={idx}>
-          <Card
+          id="menu"
+          sx={{
+            background: "#0d0d0e",
+            width: "100vw",
+            minHeight: "90vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            textAlign: "center",
+          }}
+        >
+          <Container
+            maxWidth={false}  // <-- here: allow full width
             sx={{
-              background: "#222",
-              color: "#fff",
-              height: "100%",
               display: "flex",
               flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              px: 2,
+              width: "100%",
+              py: { xs: 4, md: 8 },
             }}
           >
-            <CardMedia
-              component="img"
-              image={img}
-              alt={`Menu ${idx + 1}`}
-              sx={{
-                width: "100%",
-                height: {
-                  xs: "60vw",  // Responsive height for mobile
-                  sm: "50vw",  // Tablets
-                  md: "350px", // Fixed height for desktop
-                },
-                objectFit: "cover",
-              }}
-            />
-          </Card>
-        </Grid>
-      ))}
-    </Grid>
-    <Box sx={{ textAlign: "center", mt: 4 }}>
-      <Button variant="outlined" color="warning" href="/menu">
-        See Full Menu
-      </Button>
-    </Box>
-  </Container>
-</Box>
-
-
+            <Typography
+              variant="h3"
+              color="#ffb347"
+              gutterBottom
+              sx={{ fontSize: { xs: "1.5rem", md: "2.5rem" }, textAlign: "center" }}
+            >
+              Menu Preview
+            </Typography>
+            <Grid
+              container
+              spacing={3}
+              sx={{ maxWidth: 1200, mx: "auto", width: "100%" }}
+              justifyContent="center"
+              alignItems="center"
+            >
+              {["/menu1.png", "/menu3.png", "/menu2.png"].map((img, idx) => (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4} // 3 columns on desktop
+                  key={idx}
+                  sx={{ display: "flex", justifyContent: "center" }}
+                >
+                  <Card
+                    sx={{
+                      background: "#222",
+                      color: "#fff",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 500,
+                      width: 350,
+                      boxShadow: "0px 4px 20px rgba(0,0,0,0.5)",
+                      mx: "auto",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={img}
+                      alt={`Menu ${idx + 1}`}
+                      sx={{
+                        maxHeight: "90%",
+                        maxWidth: "90%",
+                        borderRadius: 2,
+                        objectFit: "contain",
+                        mx: "auto",
+                      }}
+                    />
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+            <Box sx={{ textAlign: "center", mt: 4 }}>
+              <Button variant="outlined" color="warning" href="/menu">
+                See Full Menu
+              </Button>
+            </Box>
+          </Container>
+        </Box>
 
         {/* About Us */}
         <Box

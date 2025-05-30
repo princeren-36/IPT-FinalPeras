@@ -12,13 +12,19 @@ html, body {
   overflow-x: hidden;
 }
 
-.home-section {
-  width: 100%;
-  min-height: 100vh;
-  box-sizing: border-box;
+.home-section img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.home-section .MuiCard-root {
   display: flex;
-  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 /* Add different background colors for each section */
@@ -31,4 +37,3 @@ html, body {
 .home-section:nth-of-type(3) {
   background: #264653;
 }
-
