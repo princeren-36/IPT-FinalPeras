@@ -5,7 +5,7 @@ import Dashboard from '../admin/Dashboard';
 import ManageUsers from '../admin/ManageUsers';
 import ManageProducts from '../admin/ManageProducts';
 
-import AdminSidebar from '../admin/AdminSidebar';
+import AdminSidebar from '../admin/AdminNavbar';
 import axios from 'axios'
 function Admin() {
   const navigate = useNavigate();
@@ -14,17 +14,16 @@ function Admin() {
   const [loginDialogOpen, setLoginDialogOpen] = useState(true);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
-  // Product management state
+
   const [products, setProducts] = useState([]);
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [productForm, setProductForm] = useState({ name: '', price: '', category: '', image: null });
   const [productSnackbar, setProductSnackbar] = useState('');
-  // User management state
+
   const [users, setUsers] = useState([]);
   const [userSnackbar, setUserSnackbar] = useState('');
 
-  // Fetch products and users (simulate for now)
   React.useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
@@ -36,13 +35,11 @@ function Admin() {
       }).catch(error => {
         console.error('Error fetching data:', error);
       });
-
     }
   }, [isLoggedIn]);
 
   const handleTabChange = (event, newValue) => setTab(newValue);
 
-  // Admin login logic (simple demo, replace with real auth)
   const handleLogin = () => {
     if (loginForm.username === 'admin' && loginForm.password === 'admin') {
       setIsLoggedIn(true);

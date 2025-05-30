@@ -1,4 +1,3 @@
-
 /* #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -41,3 +40,35 @@
 .read-the-docs {
   color: #888;
 } */
+
+/* Responsive App Layout */
+.app-responsive-root {
+  min-height: 100vh;
+  width: 100vw;
+  background: #181a20;
+  display: flex;
+  flex-direction: column;
+}
+.app-responsive-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  .app-responsive-content {
+    padding: 0.5rem 0.2rem;
+  }
+}
+@media (max-width: 600px) {
+  .app-responsive-root {
+    padding: 0;
+  }
+  .app-responsive-content {
+    padding: 0.2rem 0.05rem;
+  }
+}

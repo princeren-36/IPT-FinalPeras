@@ -20,13 +20,17 @@ import {
   CircularProgress,
   MenuItem,
 } from "@mui/material";
-import AdminSidebar from "./AdminSidebar";
+import AdminNavbar from "./AdminNavbar";
+import "../styles/ManageProducts.css";
 
 const categories = [
   "Rice Meal",
   "Snacks",
   "Drinks"
 ];
+
+const cloudinaryUrl = "https://api.cloudinary.com/v1_1/your-cloud-name/upload";
+const cloudinaryUploadPreset = "your-upload-preset"; // You need to set this in your Cloudinary settings.
 
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
@@ -103,6 +107,25 @@ const ManageProducts = () => {
     return errors;
   };
 
+  // Upload image to Cloudinary
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", cloudinaryUploadPreset);
+
+    try {
+      const res = await fetch(cloudinaryUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      return data.secure_url; // Cloudinary URL of the uploaded image
+    } catch (err) {
+      throw new Error("Image upload failed.");
+    }
+  };
+
   // Add or Edit product
   const handleSave = async (e) => {
     e.preventDefault();
@@ -111,24 +134,40 @@ const ManageProducts = () => {
       setFormErrors(errors);
       return;
     }
+
     try {
+      let imageUrl = form.image;
+
+      if (imageFile) {
+        // Upload image if a new one is selected
+        imageUrl = await uploadImage(imageFile);
+      }
+
       let url = "https://kantokusina.vercel.app/products";
       let method = "POST";
+
       if (editingProduct) {
         url += `/${editingProduct._id}`;
         method = "PUT";
       }
-      const formData = new FormData();
-      formData.append("name", form.name);
-      formData.append("price", form.price);
-      formData.append("category", form.category);
-      if (imageFile) formData.append("image", imageFile);
-      // Only send image if new or changed
+
+      const productData = {
+        name: form.name,
+        price: form.price,
+        category: form.category,
+        image: imageUrl, // use Cloudinary image URL
+      };
+
       const res = await fetch(url, {
         method,
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
       });
+
       if (!res.ok) throw new Error("Failed to save product");
+
       setSnackbar(editingProduct ? "Product updated!" : "Product added!");
       setDialogOpen(false);
       fetchProducts();
@@ -152,204 +191,177 @@ const ManageProducts = () => {
 
   if (loading)
     return (
-      <Box sx={{ p: 4, textAlign: "center" }}>
-        <CircularProgress />
-      </Box>
+      <>
+        <AdminNavbar tab={1} onTabChange={() => {}} onLogout={() => {}} />
+        <div className="admin-root">
+          <div className="manage-products-loading">
+            <CircularProgress />
+          </div>
+        </div>
+      </>
     );
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", background: "#23263a" }}>
-      <AdminSidebar tab={2} onTabChange={() => {}} onLogout={() => {}} />
-      <Box sx={{ flexGrow: 1, p: 4 }}>
-        <Typography
-          variant="h4"
-          sx={{ color: "#ffb347", mb: 3, fontWeight: "bold" }}
-        >
-          Admin - Manage Products
-        </Typography>
-        <Button
-          variant="contained"
-          sx={{
-            mb: 2,
-            background: "#ffb347",
-            color: "#23263a",
-            fontWeight: "bold",
-          }}
-          onClick={() => handleOpenDialog()}
-        >
-          Add Product
-        </Button>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-        <TableContainer
-          component={Paper}
-          sx={{ background: "#264653", color: "#fff", mb: 2 }}
-        >
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: "#ffb347" }}>Image</TableCell>
-                <TableCell sx={{ color: "#ffb347" }}>Name</TableCell>
-                <TableCell sx={{ color: "#ffb347" }}>Price</TableCell>
-                <TableCell sx={{ color: "#ffb347" }}>Category</TableCell>
-                <TableCell sx={{ color: "#ffb347" }}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {products.map((prod) => (
-                <TableRow key={prod._id}>
-                  <TableCell>
-                    {prod.image && (
-                      <img
-                        src={prod.image}
-                        alt={prod.name}
-                        style={{
-                          width: 60,
-                          height: 60,
-                          objectFit: "cover",
-                          borderRadius: 8,
-                        }}
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>{prod.name}</TableCell>
-                  <TableCell>₱{prod.price}</TableCell>
-                  <TableCell>{prod.category}</TableCell>
-                  <TableCell>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      sx={{ mr: 1 }}
-                      onClick={() => handleOpenDialog(prod)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      color="error"
-                      onClick={() => handleDelete(prod._id)}
-                    >
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {/* Add/Edit Dialog */}
-        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-          <DialogTitle>
-            {editingProduct ? "Edit Product" : "Add Product"}
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-              margin="dense"
-              label="Name"
-              name="name"
-              value={form.name}
-              onChange={handleFormChange}
-              fullWidth
-              error={!!formErrors.name}
-              helperText={formErrors.name}
-            />
-            <TextField
-              margin="dense"
-              label="Price"
-              name="price"
-              value={form.price}
-              onChange={handleFormChange}
-              fullWidth
-              error={!!formErrors.price}
-              helperText={formErrors.price}
-            />
-            <TextField
-              margin="dense"
-              label="Category"
-              name="category"
-              value={form.category}
-              onChange={handleFormChange}
-              select
-              fullWidth
-              error={!!formErrors.category}
-              helperText={formErrors.category}
-            >
-              {categories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Button
-              variant="contained"
-              component="label"
-              sx={{ mt: 2 }}
-            >
-              {editingProduct ? "Change Image" : "Upload Image"}
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={handleImageChange}
-              />
-            </Button>
-            {(form.image && !imageFile) && (
-              <Box sx={{ mt: 2 }}>
-                <img
-                  src={form.image}
-                  alt="Current"
-                  style={{
-                    width: 100,
-                    height: 100,
-                    objectFit: "cover",
-                    borderRadius: 8,
-                  }}
-                />
-              </Box>
-            )}
-            {imageFile && (
-              <Box sx={{ mt: 2 }}>
-                <Typography variant="caption">
-                  Selected: {imageFile.name}
-                </Typography>
-              </Box>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button
-              onClick={handleSave}
-              variant="contained"
-              sx={{
-                background: "#ffb347",
-                color: "#23263a",
-                fontWeight: "bold",
-              }}
-            >
-              {editingProduct ? "Update" : "Add"}
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Snackbar
-          open={!!snackbar}
-          autoHideDuration={2000}
-          onClose={() => setSnackbar("")}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setSnackbar("")}
-            severity={snackbar.startsWith("Error") ? "error" : "success"}
-            sx={{ width: "100%" }}
+    <>
+      <AdminNavbar tab={1} onTabChange={() => {}} onLogout={() => {}} />
+      <div className="admin-root">
+        <div className="admin-content">
+          <h2 className="manage-products-title">Admin - Manage Products</h2>
+          <button
+            className="manage-products-add-btn"
+            onClick={() => handleOpenDialog()}
           >
-            {snackbar}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Box>
+            Add Product
+          </button>
+          {error && (
+            <div className="manage-products-alert">
+              {error}
+            </div>
+          )}
+          <div className="manage-products-table-container">
+            <table className="manage-products-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((prod) => (
+                  <tr key={prod._id}>
+                    <td>
+                      {prod.image && (
+                        <img
+                          src={prod.image}
+                          alt={prod.name}
+                          className="manage-products-img"
+                        />
+                      )}
+                    </td>
+                    <td>{prod.name}</td>
+                    <td>₱{prod.price}</td>
+                    <td>{prod.category}</td>
+                    <td>
+                      <button
+                        className="manage-products-edit-btn"
+                        onClick={() => handleOpenDialog(prod)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="manage-products-delete-btn"
+                        onClick={() => handleDelete(prod._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Add/Edit Dialog */}
+          <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="xs" PaperProps={{ className: 'manage-products-dialog' }}>
+            <DialogTitle>
+              {editingProduct ? "Edit Product" : "Add Product"}
+            </DialogTitle>
+            <DialogContent>
+              <TextField
+                margin="dense"
+                label="Name"
+                name="name"
+                value={form.name}
+                onChange={handleFormChange}
+                fullWidth
+                error={!!formErrors.name}
+                helperText={formErrors.name}
+                className="manage-products-input"
+              />
+              <TextField
+                margin="dense"
+                label="Price"
+                name="price"
+                value={form.price}
+                onChange={handleFormChange}
+                fullWidth
+                error={!!formErrors.price}
+                helperText={formErrors.price}
+                className="manage-products-input"
+              />
+              <TextField
+                margin="dense"
+                label="Category"
+                name="category"
+                value={form.category}
+                onChange={handleFormChange}
+                select
+                fullWidth
+                error={!!formErrors.category}
+                helperText={formErrors.category}
+                className="manage-products-input"
+              >
+                {categories.map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <label className="manage-products-upload-label">
+                {editingProduct ? "Change Image" : "Upload Image"}
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleImageChange}
+                />
+              </label>
+              {(form.image && !imageFile) && (
+                <div className="manage-products-img-preview">
+                  <img
+                    src={form.image}
+                    alt="Current"
+                    className="manage-products-img-large"
+                  />
+                </div>
+              )}
+              {imageFile && (
+                <div className="manage-products-img-preview">
+                  <span className="manage-products-img-caption">
+                    Selected: {imageFile.name}
+                  </span>
+                </div>
+              )}
+            </DialogContent>
+            <DialogActions>
+              <button className="manage-products-cancel-btn" onClick={handleCloseDialog}>Cancel</button>
+              <button
+                className="manage-products-save-btn"
+                onClick={handleSave}
+              >
+                {editingProduct ? "Update" : "Add"}
+              </button>
+            </DialogActions>
+          </Dialog>
+          <Snackbar
+            open={!!snackbar}
+            autoHideDuration={2000}
+            onClose={() => setSnackbar("")}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          >
+            <Alert
+              onClose={() => setSnackbar("")}
+              severity={snackbar.startsWith("Error") ? "error" : "success"}
+              className="manage-products-snackbar"
+            >
+              {snackbar}
+            </Alert>
+          </Snackbar>
+        </div>
+      </div>
+    </>
   );
 };
 

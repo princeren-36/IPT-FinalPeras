@@ -55,13 +55,7 @@ function Register() {
 
   return (
     <Box className="login" display="flex" height="100vh">
-      <Box className="image" flex={1}>
-        <img
-          src="/images/register.jpg"
-          alt="register"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </Box>
+      
 
       <Paper className="container-login" elevation={6} sx={{ p: 4, width: "25%", margin: "auto" }}>
         <Typography variant="h5" gutterBottom>Register</Typography>

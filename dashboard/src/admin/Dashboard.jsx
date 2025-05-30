@@ -1,16 +1,18 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
-import AdminSidebar from './AdminSidebar';
+import AdminNavbar from './AdminNavbar';
+import '../styles/Admin.css';
 
 function Dashboard() {
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', background: '#23263a' }}>
-      <AdminSidebar tab={0} onTabChange={() => {}} onLogout={() => {}} />
-      <Box sx={{ flexGrow: 1, p: 4 }}>
-        <Typography variant="h5" sx={{ color: '#ffb347', mb: 2 }}>Welcome, Admin!</Typography>
-        <Typography>Here you can manage users and products.</Typography>
-      </Box>
-    </Box>
+    <>
+      <AdminNavbar tab={0} onTabChange={() => {}} onLogout={() => {}} />
+      <div className="admin-root">
+        <div className="admin-content">
+          <h2 style={{ color: '#ffb347', marginBottom: '1.5rem' }}>Welcome, Admin!</h2>
+          <p style={{ color: '#fff' }}>Here you can manage users and products.</p>
+        </div>
+      </div>
+    </>
   );
 }
 

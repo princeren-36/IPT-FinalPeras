@@ -48,13 +48,7 @@ function Login() {
 
   return (
     <Box display="flex" height="100vh">
-      <Box flex={1}>
-        <img
-          src="/images/login.jpg"
-          alt="login"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      </Box>
+      
 
       <Paper
         elevation={6}
