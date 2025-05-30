@@ -171,14 +171,14 @@ function Home() {
               ))}
             </Grid>
             <Box sx={{ textAlign: "center", mt: 4 }}>
-  <Button
-    variant="outlined"
-    color="warning"
-    component={RouterLink}  // Use component prop
-    to="/menu"
-  >
-    See Full Menu
-  </Button>
+  <RouterLink to="/menu" style={{ textDecoration: "none" }}>
+    <Button
+      variant="outlined"
+      color="warning"
+    >
+      See Full Menu
+    </Button>
+  </RouterLink>
 </Box>
           </Container>
         </Box>
