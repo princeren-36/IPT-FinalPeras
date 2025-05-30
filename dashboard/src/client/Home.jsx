@@ -14,6 +14,7 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import NavBar from "./NavBar";
+import { Link as RouterLink } from 'react-router-dom';
 import "../styles/Home.css";
 
 function Home() {
@@ -170,10 +171,15 @@ function Home() {
               ))}
             </Grid>
             <Box sx={{ textAlign: "center", mt: 4 }}>
-              <Button variant="outlined" color="warning" Link to="/menu">
-                See Full Menu
-              </Button>
-            </Box>
+  <Button
+    variant="outlined"
+    color="warning"
+    component={RouterLink}  // Use component prop
+    to="/menu"
+  >
+    See Full Menu
+  </Button>
+</Box>
           </Container>
         </Box>
 
