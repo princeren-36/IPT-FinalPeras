@@ -48,7 +48,7 @@ const ManageProducts = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("https://kantokusina.vercel.app/products");
+      const res = await fetch("https://kantokusinafinal.vercel.app/products");
       if (!res.ok) throw new Error("Failed to fetch products");
       const data = await res.json();
       setProducts(data);
