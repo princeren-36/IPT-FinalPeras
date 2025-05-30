@@ -6,7 +6,7 @@ import ManageUsers from '../admin/ManageUsers';
 import ManageProducts from '../admin/ManageProducts';
 
 import AdminSidebar from '../admin/AdminSidebar';
-
+import axios from 'axios'
 function Admin() {
   const navigate = useNavigate();
   const [tab, setTab] = useState(0);
@@ -27,12 +27,16 @@ function Admin() {
   // Fetch products and users (simulate for now)
   React.useEffect(() => {
     if (isLoggedIn) {
-      fetch('/products')
-        .then(res => res.json())
-        .then(data => setProducts(data));
-      fetch('/users')
-        .then(res => res.json())
-        .then(data => setUsers(data));
+      Promise.all([
+        axios.get('https://kantokusina.vercel.app/products'),
+        axios.get('https://kantokusina.vercel.app/user/all')
+      ]).then(([productsResponse, usersResponse]) => {
+        setProducts(productsResponse.data);
+        setUsers(usersResponse.data);
+      }).catch(error => {
+        console.error('Error fetching data:', error);
+      });
+
     }
   }, [isLoggedIn]);
 
