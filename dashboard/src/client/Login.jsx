@@ -32,10 +32,8 @@ function Login() {
       const user = response.data.user;
       localStorage.setItem("user", JSON.stringify(user));
 
-      // Notify app of login
       window.dispatchEvent(new CustomEvent("userChanged", { detail: user }));
 
-      // Redirect
       if (user.role === "admin") {
         navigate("/admin");
       } else {
@@ -48,8 +46,6 @@ function Login() {
 
   return (
     <Box display="flex" height="100vh">
-      
-
       <Paper
         elevation={6}
         sx={{ p: 4, width: { xs: "90%", sm: "60%", md: "25%" }, margin: "auto" }}

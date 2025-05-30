@@ -31,7 +31,12 @@ function AdminSidebar({ tab, onTabChange, onLogout }) {
           </a>
         ))}
       </nav>
-      <button className="admin-navbar-logout" onClick={onLogout}>
+      <button className="admin-navbar-logout" onClick={() => {
+        onLogout && onLogout();
+        navigate("/"); 
+        localStorage.removeItem("user");
+        window.location.reload();
+      }}>
         Logout
       </button>
     </header>

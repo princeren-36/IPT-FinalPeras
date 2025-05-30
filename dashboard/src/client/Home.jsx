@@ -74,8 +74,7 @@ function Home() {
           </Box>
         </Container>
       </Box>
-
-      {/* About Us */}
+      
       <Box className="home-about-section">
         <Container maxWidth="md" sx={{ py: { xs: 4, md: 8 } }}>
           <Typography className="home-about-title" variant="h3" gutterBottom>
@@ -90,7 +89,6 @@ function Home() {
         </Container>
       </Box>
 
-      {/* Location */}
       <Box className="home-location-section">
         <Container
           maxWidth="md"
@@ -119,7 +117,6 @@ function Home() {
         </Container>
       </Box>
 
-      {/* Socials */}
       <Box className="home-socials-section">
         <Container
           maxWidth="md"

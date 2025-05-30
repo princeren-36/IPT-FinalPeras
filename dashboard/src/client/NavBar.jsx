@@ -34,7 +34,6 @@ function NavBar() {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [logoutDialogOpen, setLogoutDialogOpen] = React.useState(false);
 
-  // User state synced with localStorage
   const [user, setUser] = React.useState(() => {
     try {
       return JSON.parse(localStorage.getItem("user"));
@@ -45,7 +44,6 @@ function NavBar() {
 
   const navigate = useNavigate();
 
-  // Sync user state with localStorage changes (manual refresh)
   React.useEffect(() => {
     const syncUser = () => {
       try {
@@ -56,28 +54,22 @@ function NavBar() {
       }
     };
 
-    // Optionally sync on mount
     syncUser();
 
-    // Listen to storage changes (for other tabs)
     window.addEventListener("storage", syncUser);
 
     return () => window.removeEventListener("storage", syncUser);
   }, []);
 
-  // Call this to update user state after login/logout manually as needed
-
   const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
-  // Show confirmation dialog on logout click
   const handleLogoutClick = () => setLogoutDialogOpen(true);
 
-  // Confirm logout
   const handleLogoutConfirm = () => {
     localStorage.removeItem("user");
     setUser(null);
     setLogoutDialogOpen(false);
-    navigate("/"); // Redirect to landing page
+    navigate("/");
   };
 
   const handleLogoutCancel = () => setLogoutDialogOpen(false);
@@ -86,7 +78,6 @@ function NavBar() {
     <>
       <AppBar position="sticky" className="navbar-appbar">
         <Toolbar className="navbar-toolbar">
-          {/* Logo and Title */}
           <Box className="navbar-logo-title">
             <Button
               variant="text"
@@ -104,7 +95,6 @@ function NavBar() {
             <Typography variant="h6">Kanto Kusina</Typography>
           </Box>
 
-          {/* Desktop Links */}
           {!isMobile && (
             <Box className="navbar-links">
               {navLinks.map((link) => (
@@ -140,7 +130,6 @@ function NavBar() {
             </Box>
           )}
 
-          {/* Mobile Menu */}
           {isMobile && (
             <>
               <IconButton
@@ -205,7 +194,6 @@ function NavBar() {
         </Toolbar>
       </AppBar>
 
-      {/* Logout Confirmation Dialog */}
       <Dialog
         open={logoutDialogOpen}
         onClose={handleLogoutCancel}

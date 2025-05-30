@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Paper, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Dashboard from '../admin/Dashboard';
 import ManageUsers from '../admin/ManageUsers';
 import ManageProducts from '../admin/ManageProducts';
+import AdminSidebar from '../admin/AdminSidebar';
+import axios from 'axios';
 
-import AdminSidebar from '../admin/AdminNavbar';
-import axios from 'axios'
 function Admin() {
   const navigate = useNavigate();
   const [tab, setTab] = useState(0);
@@ -24,11 +24,11 @@ function Admin() {
   const [users, setUsers] = useState([]);
   const [userSnackbar, setUserSnackbar] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
         axios.get('https://kantokusina.vercel.app/products'),
-        axios.get('https://kantokusina.vercel.app/user/all')
+        axios.get('https://kantokusina.vercel.app/user/all'),
       ]).then(([productsResponse, usersResponse]) => {
         setProducts(productsResponse.data);
         setUsers(usersResponse.data);
@@ -37,8 +37,6 @@ function Admin() {
       });
     }
   }, [isLoggedIn]);
-
-  const handleTabChange = (event, newValue) => setTab(newValue);
 
   const handleLogin = () => {
     if (loginForm.username === 'admin' && loginForm.password === 'admin') {
@@ -50,38 +48,40 @@ function Admin() {
     }
   };
 
-  // Product CRUD logic
+  const handleTabChange = (event, newValue) => setTab(newValue);
+
   const handleOpenProductDialog = (product = null) => {
     setEditingProduct(product);
     setProductForm(product ? { ...product, image: null } : { name: '', price: '', category: '', image: null });
     setProductDialogOpen(true);
   };
+
   const handleCloseProductDialog = () => setProductDialogOpen(false);
+  
   const handleProductFormChange = (e) => {
     const { name, value, files } = e.target;
     setProductForm(prev => ({ ...prev, [name]: files ? files[0] : value }));
   };
+  
   const handleProductSave = async () => {
-    // Simulate API call
     setProductSnackbar(editingProduct ? 'Product updated!' : 'Product added!');
     setProductDialogOpen(false);
   };
+
   const handleProductDelete = (id) => {
     setProductSnackbar('Product deleted!');
   };
 
-  // User management logic (demo only)
   const handleUserDelete = (id) => {
     setUserSnackbar('User deleted!');
   };
 
-  // Add logout handler
   const handleLogout = () => {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
     setLoginDialogOpen(true);
     setLoginForm({ username: '', password: '' });
-    navigate('/login');
+    navigate('/login'); 
   };
 
   return (

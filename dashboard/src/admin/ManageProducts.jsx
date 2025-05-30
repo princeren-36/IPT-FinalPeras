@@ -48,7 +48,6 @@ const ManageProducts = () => {
   const [snackbar, setSnackbar] = useState("");
   const [error, setError] = useState("");
 
-  // Fetch products
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -68,7 +67,6 @@ const ManageProducts = () => {
     fetchProducts();
   }, []);
 
-  // Open dialog for add or edit
   const handleOpenDialog = (product = null) => {
     setFormErrors({});
     if (product) {
@@ -89,7 +87,6 @@ const ManageProducts = () => {
   };
   const handleCloseDialog = () => setDialogOpen(false);
 
-  // Form change handlers
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -97,7 +94,6 @@ const ManageProducts = () => {
     setImageFile(e.target.files[0]);
   };
 
-  // Validation
   const validateProduct = () => {
     const errors = {};
     if (!form.name) errors.name = "Name required";
@@ -107,7 +103,6 @@ const ManageProducts = () => {
     return errors;
   };
 
-  // Upload image to Cloudinary
   const uploadImage = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -120,13 +115,12 @@ const ManageProducts = () => {
       });
 
       const data = await res.json();
-      return data.secure_url; // Cloudinary URL of the uploaded image
+      return data.secure_url;
     } catch (err) {
       throw new Error("Image upload failed.");
     }
   };
 
-  // Add or Edit product
   const handleSave = async (e) => {
     e.preventDefault();
     const errors = validateProduct();
@@ -139,7 +133,6 @@ const ManageProducts = () => {
       let imageUrl = form.image;
 
       if (imageFile) {
-        // Upload image if a new one is selected
         imageUrl = await uploadImage(imageFile);
       }
 
@@ -155,7 +148,7 @@ const ManageProducts = () => {
         name: form.name,
         price: form.price,
         category: form.category,
-        image: imageUrl, // use Cloudinary image URL
+        image: imageUrl,
       };
 
       const res = await fetch(url, {
@@ -176,7 +169,6 @@ const ManageProducts = () => {
     }
   };
 
-  // Delete product
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
@@ -263,7 +255,6 @@ const ManageProducts = () => {
               </tbody>
             </table>
           </div>
-          {/* Add/Edit Dialog */}
           <Dialog open={dialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="xs" PaperProps={{ className: 'manage-products-dialog' }}>
             <DialogTitle>
               {editingProduct ? "Edit Product" : "Add Product"}

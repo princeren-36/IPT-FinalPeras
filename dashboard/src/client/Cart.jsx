@@ -85,7 +85,7 @@ function Cart() {
     if (Object.keys(newErrors).length > 0) return;
 
     const orderData = {
-      userId: user._id, // adjust this if your user object is different
+      userId: user._id, 
       name,
       email,
       address,

@@ -1,5 +1,3 @@
-// src/components/Menu.jsx
-
 import React, { useState, useEffect } from 'react';
 import {
   Container,
@@ -20,7 +18,6 @@ function Menu() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
-    // Use the correct backend URL
     fetch("https://kantokusina.vercel.app/products")
       .then(res => res.json())
       .then(data => setMenuItems(data))

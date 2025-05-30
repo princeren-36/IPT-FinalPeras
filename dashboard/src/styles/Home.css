@@ -91,7 +91,6 @@ html, body {
   background: #ffa726;
 }
 
-/* Home Menu Preview Section (from HomeMenuPreview.css) */
 .home-menu-preview-section {
   background: #0d0d0e;
   width: 100vw;
@@ -121,7 +120,7 @@ html, body {
   margin-bottom: 2rem;
 }
 .home-menu-preview-grid {
-  max-width: 1400px; /* Make grid wider */
+  max-width: 1400px; 
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -141,8 +140,8 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 800px; /* Make card taller */
-  width: 800px;  /* Make card wider */
+  height: 800px; 
+  width: 800px;  
   box-shadow: 0px 4px 20px rgba(0,0,0,0.3);
   border-radius: 16px;
   margin-left: auto;
@@ -209,7 +208,6 @@ html, body {
   }
 }
 
-/* About Section */
 .home-about-section {
   background: #3a3f5c;
   min-height: 60vh;
@@ -230,7 +228,6 @@ html, body {
   color: #fff;
 }
 
-/* Location Section */
 .home-location-section {
   background: #2d2d2d;
   min-height: 40vh;
@@ -263,7 +260,6 @@ html, body {
   border-radius: 8px;
 }
 
-/* Contact Section */
 .home-contact-section {
   background: #ffb347;
   min-height: 20vh;
@@ -302,7 +298,6 @@ html, body {
   color: #222;
 }
 
-/* Add different background colors for each section */
 .home-section:nth-of-type(1) {
   background: #2d2d2d;
 }
@@ -314,7 +309,6 @@ html, body {
 
 }
 
-/* Landing Section */
 .landing-section {
   width: 100%;
   min-height: 93vh;
@@ -358,7 +352,6 @@ html, body {
   border-radius: 20px;
 }
 
-/* Menu Section */
 .menu-section {
   background: #0d0d0e;
   width: 100vw;
@@ -426,7 +419,6 @@ html, body {
   border-color: #ffb347;
 }
 
-/* About Section */
 .home-about-section {
   background: #ffb347;
   min-height: 60vh;
@@ -447,7 +439,6 @@ html, body {
   color: #0d0d0e;
 }
 
-/* Location Section */
 .home-location-section {
   background: #0d0d0e;
   min-height: 40vh;
@@ -483,7 +474,6 @@ html, body {
   border-radius: 8px;
 }
 
-/* Socials Section */
 .home-socials-section {
   background: #ffb347;
   min-height: 20vh;
@@ -522,7 +512,6 @@ html, body {
   color: #222;
 }
 
-/* Add different background colors for each section */
 .home-section:nth-of-type(1) {
   background: #2d2d2d;
 }

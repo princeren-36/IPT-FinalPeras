@@ -136,7 +136,6 @@
   font-weight: bold !important;
 }
 
-/* Responsive styles */
 @media (max-width: 600px) {
   .nav-wrapper {
     flex-direction: column;

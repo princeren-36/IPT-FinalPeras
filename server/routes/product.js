@@ -3,129 +3,82 @@ const Product = require("../models/Product");
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const streamifier = require("streamifier");
-
+const dotenv = require("dotenv");
+dotenv.config();
 const router = express.Router();
-
-// Cloudinary config from environment variables
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: "dqxs4adrm",
+  api_key: "992441237856933",
+  api_secret: "eLl0H__kXiCbRH-nDbyCnpW0p-w",
 });
-
-// Multer for memory storage with file size and type validation
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },  // Limit to 5MB
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files (jpg, png, gif) are allowed!'), false);
-    }
-  }
+    if (allowedTypes.includes(file.mimetype)) { cb(null, true); } else { cb(new Error('Only image files are allowed!'), false); }
+  },
 });
-
-// GET all products
+const streamUpload = (req) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream((error, result) => {
+      if (result) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
+    streamifier.createReadStream(req.file.buffer).pipe(stream);
+  });
+};
 router.get("/", async (req, res) => {
   try {
     const products = await Product.find();
-    res.status(200).json(products);
+    res.json(products);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch products", error: err });
+    res.status(500).json({ message: "Failed to fetch products" });
   }
 });
-
-// POST create product with Cloudinary image upload
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     let imageUrl = "";
     if (req.file) {
-      const streamUpload = (req) => {
-        return new Promise((resolve, reject) => {
-          let stream = cloudinary.uploader.upload_stream(
-            { folder: "ipt-finalperas" },
-            (error, result) => {
-              if (result) {
-                resolve(result);
-              } else {
-                reject(error);
-              }
-            }
-          );
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
       const result = await streamUpload(req);
       imageUrl = result.secure_url;
     }
-
     const { name, price, category } = req.body;
-    if (!name || !price || !category) {
-      return res.status(400).json({ message: "Name, price, and category are required" });
-    }
-
-    const newProduct = new Product({ name, price, image: imageUrl, category });
-    await newProduct.save();
-    res.status(201).json(newProduct);
+    const product = new Product({ name, price, category, image: imageUrl });
+    await product.save();
+    res.status(201).json(product);
   } catch (err) {
-    res.status(500).json({ message: "Upload failed", error: err.message || err });
+    res.status(500).json({ message: "Failed to add product" });
   }
 });
-
-// PUT update product
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
-    const { name, price, category } = req.body;
-    if (!name || !price || !category) {
-      return res.status(400).json({ message: "Name, price, and category are required" });
-    }
-
-    const update = { name, price, category };
+    let imageUrl = req.body.image;
     if (req.file) {
-      const streamUpload = (req) => {
-        return new Promise((resolve, reject) => {
-          let stream = cloudinary.uploader.upload_stream(
-            { folder: "ipt-finalperas" },
-            (error, result) => {
-              if (result) {
-                resolve(result);
-              } else {
-                reject(error);
-              }
-            }
-          );
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
-        });
-      };
       const result = await streamUpload(req);
-      update.image = result.secure_url;
+      imageUrl = result.secure_url;
     }
-
-    const product = await Product.findByIdAndUpdate(req.params.id, update, { new: true });
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    res.status(200).json(product);
+    const { name, price, category } = req.body;
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, price, category, image: imageUrl },
+      { new: true }
+    );
+    res.json(product);
   } catch (err) {
-    res.status(500).json({ message: "Failed to update product", error: err.message || err });
+    res.status(500).json({ message: "Failed to update product" });
   }
 });
-
-// DELETE product
 router.delete("/:id", async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-    res.status(200).json({ message: "Product deleted" });
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: "Product deleted" });
   } catch (err) {
-    res.status(500).json({ message: "Failed to delete product", error: err.message || err });
+    res.status(500).json({ message: "Failed to delete product" });
   }
 });
-
 module.exports = router;

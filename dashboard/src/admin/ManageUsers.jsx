@@ -6,7 +6,6 @@ function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [userSnackbar, setUserSnackbar] = useState('');
 
-  // Fetch users from backend on mount
   useEffect(() => {
     fetch('https://kantokusina.vercel.app/user/all')
       .then(res => res.json())

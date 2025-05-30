@@ -1,4 +1,3 @@
-/* Admin Dashboard Layout */
 .admin-root {
   display: flex;
   min-height: 100vh;
@@ -150,7 +149,6 @@
     margin: 0.3rem 0 0 0;
   }
 }
-/* Remove sidebar layout for navbar usage */
 .admin-sidebar, .admin-sidebar-nav, .admin-sidebar-link, .admin-sidebar-logout, .admin-sidebar-nav-horizontal, .admin-sidebar-logout-horizontal {
   display: none !important;
   height: 0 !important;
