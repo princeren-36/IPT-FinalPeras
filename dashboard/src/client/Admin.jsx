@@ -27,8 +27,8 @@ function Admin() {
   useEffect(() => {
     if (isLoggedIn) {
       Promise.all([
-        axios.get('https://kantokusina.vercel.app/products'),
-        axios.get('https://kantokusina.vercel.app/user/all'),
+        axios.get('http://localhost:5000/products'),
+        axios.get('http://localhost:5000/user/all'),
       ]).then(([productsResponse, usersResponse]) => {
         setProducts(productsResponse.data);
         setUsers(usersResponse.data);
@@ -57,12 +57,12 @@ function Admin() {
   };
 
   const handleCloseProductDialog = () => setProductDialogOpen(false);
-  
+
   const handleProductFormChange = (e) => {
     const { name, value, files } = e.target;
     setProductForm(prev => ({ ...prev, [name]: files ? files[0] : value }));
   };
-  
+
   const handleProductSave = async () => {
     setProductSnackbar(editingProduct ? 'Product updated!' : 'Product added!');
     setProductDialogOpen(false);
@@ -81,7 +81,7 @@ function Admin() {
     setIsLoggedIn(false);
     setLoginDialogOpen(true);
     setLoginForm({ username: '', password: '' });
-    navigate('/login'); 
+    navigate('/login');
   };
 
   return (
