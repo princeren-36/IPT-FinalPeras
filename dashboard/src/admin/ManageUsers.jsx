@@ -9,7 +9,7 @@ function ManageUsers() {
 
   // Fetch users from backend on mount
   useEffect(() => {
-  fetch('https://kantokusina.vercel.app/api/user/all')
+  fetch('https://kantokusina.vercel.app/user/all')
     .then(res => res.json())
     .then(data => setUsers(data))
     .catch(() => setUserSnackbar('Failed to fetch users'));
@@ -17,7 +17,7 @@ function ManageUsers() {
 
 const onUserDelete = async (userId) => {
   try {
-    const res = await fetch(`https://kantokusina.vercel.app/api/user/${userId}`, {
+    const res = await fetch(`https://kantokusina.vercel.app/user/${userId}`, {
       method: 'DELETE'
     });
     if (res.ok) {
